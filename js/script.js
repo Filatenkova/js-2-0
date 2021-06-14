@@ -151,3 +151,209 @@ let a = document.createElement('div')
 a.innerHTML = 'Hello!'
 a.classList.add('bgr')
 newParagraph.appendChild(a) // добавим элемент внутрь newParagraph
+
+/**
+ * Двумерные массивы
+ */
+let array = [4,5,6]
+let newArray = [
+    [1,2,3],
+    [4,5,6],
+    [7,8,9],
+]
+
+let arResult = ''
+let arTest = document.querySelector('[data-array]')
+for (let i = 0; i < newArray.length; i++) {
+    for (let k = 0; k < newArray[i].length; k++) {
+        arResult += newArray[i][k] + ' '
+    }
+    arResult += '<br>'
+}
+
+arTest.innerHTML = arResult
+
+// Задача - нажимая кнопку, передвигать единицу
+let arTask = [1,0,0,0,0]
+document.querySelector('[data-array-test]').innerHTML = arTask
+
+let key = 0
+document.querySelector('[data-btn-test]').onclick = () => {
+    if (key + 1 < 5) {
+        arTask[key] = 0
+        arTask[key + 1] = 1
+        key++
+        document.querySelector('[data-array-test]').innerHTML = arTask
+    }
+}
+
+/**
+ * Ассоциативные массивы
+ */
+let associative = {
+    'a': 5,
+    'b': 'Hello',
+    'z2': 'Hi',
+    y45: 1999
+}
+// Поиск по ключу
+console.log(associative.z2)
+
+let keySearch = 'y45'
+console.log(associative[keySearch])
+
+// Присвоение
+associative.yyyy = 555
+console.log(associative)
+
+// Перезаписать значение
+associative.a = 777
+console.log(associative)
+
+// Вывод
+// Неверно
+// document.querySelector('[data-associative]').innerHTML = associative // undefined
+// Верно
+let show = ''
+for (let key in associative) {
+    // show += key
+    show += associative[key]
+}
+document.querySelector('[data-associative]').innerHTML = show
+
+/**
+ * Прогноз погоды по API
+ * Зарегистрироваться на сайте https://home.openweathermap.org/
+ * Получить API-key https://home.openweathermap.org/api_keys
+ */
+let url = 'https://api.openweathermap.org/data/2.5/weather?q=Moscow,ru&appid=fedec6ef99816d6ddafb970805bbd953'
+
+fetch(url)
+    .then(
+        function (resp) {
+            return resp.json()
+        }
+    )
+    .then(
+        function (data) {
+            document.querySelector('[data-weather-name]').textContent = data.name
+            document.querySelector('[data-weather-degree]').innerHTML = Math.round(data.main.temp - 273) + ' &deg;С'
+            document.querySelector('[data-weather-detail]').textContent = data.weather[0]['description']
+        }
+    )
+    .catch (function () {
+
+    });
+
+/**
+ * Set
+ */
+let newSet = new Set()
+console.log(newSet)
+
+// !Отличие - по аналогии с массивами так не прокатит
+//console.log(newSet[0])
+//console.log(newSet.length)
+
+// Получим количество элементов
+console.log(newSet.size)
+
+// !Отличие - при добавлении нового элемента происходит проверка на его существование по значению и типу
+newSet.add(1)
+newSet.add(2)
+newSet.add('Hello')
+newSet.add(1) // не будет добавлен, так как в объекте уже есть такой элемент
+newSet.add('1') // будет добавлен, так как тип - строка
+
+// Проверим наличие значений в объекте
+console.log(newSet.has(1)) // true
+console.log(newSet.has('2')) // false
+
+// Циклы
+// for - не подходит, но:
+for (let i of newSet) {
+    console.log(i)
+}
+
+// Применение
+// Найти уникальные значения массива
+let arExample = [1, 2, 3, 4, 'Hello', '5', 1, 2, 3, 4]
+let newArSet = new Set(arExample)
+console.log(newArSet)
+
+// Преобразуем Set в Array
+let modNewArSet = Array.from(newArSet)
+console.log(modNewArSet)
+
+/**
+ * Цикл for of и сравнение с for, for in
+ */
+for (let key in modNewArSet) {
+    console.log(key)
+    console.log(modNewArSet[key])
+}
+
+// ! Отличие - в качестве ключей отображаются значения
+for (let item of modNewArSet) {
+    console.log(item)
+}
+
+// Соберем коллекуию элементов с тегом small
+let cycle =document.getElementsByTagName('small')
+
+// Такой массив не совсем подходит для перебора
+for (let key in cycle) {
+    console.log(key)
+    console.log(cycle[key])
+}
+
+// То, что надо
+for (let item of cycle) {
+    console.log(item)
+}
+
+/**
+ * Map, Filter
+ */
+// Map - перебрать массив и произвести какие-то действия над каждым элементом
+let map = [4, 5, 6, 7, 2, 4, 11, -192]
+let newMap = map.map(function(item, index) {
+    console.log(index)
+    // return вернет в массив то, что мы произвели в данной функции
+    return item * 5
+})
+
+// Пример применения со стрелочной функцией
+let arrowMap = map.map((item, index) => {
+    // return вернет в массив то, что мы произвели в данной функции
+    return item * 5
+})
+
+// Короткая запись
+let superMap = map.map(item => item * 5 )
+
+// Filter - cоздает новый массив со всеми проверками
+var arFilter = [1, -1, 2, -2, 3];
+
+var positiveArr = arFilter.filter(function(number) {
+    return number > 0;
+});
+
+console.log(positiveArr); // 1,2,3
+
+/**
+ * Split, Join, forEach
+ */
+// Split - разделит строку на массив через указанную подстроку
+let split = 'Hello,hi,mahai'
+console.log(split.split(',')); // ['Hello'],['hi'],['mahai']
+
+// Join - объединяет все элементы массива (или массивоподобного объекта) в строку.
+let join = ['Hello', 'hi', 'mahai']
+console.log(join.join(','));
+
+// forEach - применяет функцию один раз к указанному элементу
+// !Отличие от map и filter - не возвращает новый массив
+arFilter.forEach( function (elem, index) {
+    console.log(elem)
+})
