@@ -357,3 +357,134 @@ console.log(join.join(','));
 arFilter.forEach( function (elem, index) {
     console.log(elem)
 })
+
+/**
+ * События мыши
+ */
+// Одинарный клик
+document.querySelector('[data-click-one]').onclick = (e) => {
+    console.log('one' + e);
+}
+
+// Двойной клик
+document.querySelector('[data-click-two]').ondblclick = (e) => {
+    console.log('two' + e);
+}
+
+// Событие на вывод контекстного меню по клику правой клавишей мышки
+document.querySelector('[data-click-two]').oncontextmenu = (e) => {
+    console.log('right button');
+    // Если необходимо заблокировать событие, то используем return false
+    return false
+}
+
+// Водим мышкой поверх элемента
+let widthBlock = 100
+document.querySelector('[data-click-three]').onmousemove = () => {
+    document.querySelector('[data-click-three]').style.width = widthBlock + 'px'
+    widthBlock++
+}
+
+// Если курсор оказывается над таблицей в целом или же уходит с него.
+document.querySelector('[data-click-three]').onmouseenter = () => {
+    document.querySelector('[data-click-three]').style.background = 'red'
+}
+
+// Если курсор оказывается над элементом в целом или же уходит с него.
+document.querySelector('[data-click-three]').onmouseleave = () => {
+    document.querySelector('[data-click-three]').style.background = 'blue'
+}
+
+// Cрабатывает в момент нажатия на кнопку мыши.
+document.querySelector('[data-click-three]').onmousedown = () => {
+    document.querySelector('[data-click-three]').style.background = 'orange'
+}
+
+// Cрабатывает в момент отжатия на кнопку мыши.
+document.querySelector('[data-click-three]').onmouseup = () => {
+    document.querySelector('[data-click-three]').style.background = 'green'
+}
+
+let progress = 10
+document.querySelector('[data-click-four]').onclick = (e) => {
+    progress++
+    document.querySelector('[data-click-progress]').value = progress
+}
+
+/**
+ * События клавиатуры
+ */
+// Событие по нажатию клавиши
+document.querySelector('[data-input-keyboard]').onkeypress = (e) => {
+    console.log('charCode: ' + e.charCode);
+    console.log('code: ' + e.code);
+    console.log('key: ' + e.key);
+    console.log('keyCode: ' + e.keyCode);
+}
+
+// Клавиша нажата, но не отпущена
+document.querySelector('[data-input-keyboard]').onkeydown = (e) => {
+    console.log('charCode: ' + e.charCode);
+    console.log('code: ' + e.code);
+    console.log('key: ' + e.key);
+    console.log('keyCode: ' + e.keyCode);
+}
+
+// Клавиша отпущена
+document.querySelector('[data-input-keyboard-up]').onkeyup = (e) => {
+    console.log('charCode: ' + e.charCode);
+    console.log('code: ' + e.code);
+    console.log('key: ' + e.key);
+    console.log('keyCode: ' + e.keyCode);
+
+    const el = {
+        q: 'w',
+        w: 'e'
+    }
+
+    // Нажимаем на клавиши q или w и меняем значение input
+    document.querySelector('[data-input-keyboard-up]').value += el[e.key]
+    return false
+}
+
+/**
+ * События JavaScript на iPhone и Android телефонах
+ * Потестить, не все события работают
+ */
+
+/**
+ *  Local Storage
+ *  Смотрим консоль Application / Storage / Local Storage
+ */
+// Установим данные
+let arStorage = [1, 3, 5, 6]
+localStorage.setItem('data', arStorage)
+
+// Извлечем данные
+let getData = localStorage.getItem('data')
+console.log(getData)
+console.log(getData[1]) // ! Получим «,»
+console.log(typeof getData) // ! String
+
+// По-другому запишем данные
+localStorage.setItem('data', JSON.stringify(arStorage))
+let jsonData = localStorage.getItem('data')
+let jsonDataParse = JSON.parse(jsonData)
+console.log(typeof jsonDataParse)
+
+let inc = 0
+document.querySelector('[data-block-button]').onclick = (e) => {
+    inc++
+    localStorage.setItem('test', inc)
+}
+
+// очистим Local Storage
+localStorage.clear()
+
+// Когда в Local Storage что-то меняется, мы можем слушать это событие
+// Срабатывает только, если Local Storage был изменен на других страницах на данном хосте
+// Имитируем добавление товаров в корзину - см. app.js
+window.addEventListener('storage', function(e) {
+    console.log('change')
+    document.querySelector('[data-block-div-1]').textContent = localStorage.getItem('test')
+})
