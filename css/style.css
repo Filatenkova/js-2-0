@@ -5,3 +5,30 @@
 .bgr {
     background: blue;
 }
+
+.bgr-orange {
+    width: 600px;
+    background: orange;
+    color: #fff;
+    padding: 5px;
+    text-align: center;
+    margin: 10px auto;
+}
+
+.bgr-red {
+    width: 600px;
+    background: red;
+    color: #fff;
+    padding: 5px;
+    text-align: center;
+    margin: 10px auto;
+}
+
+.text {
+    width: 600px;
+    background: yellow;
+    color: #fff;
+    padding: 5px;
+    text-align: center;
+    margin: 10px auto;
+}
