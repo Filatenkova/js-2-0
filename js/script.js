@@ -488,3 +488,153 @@ window.addEventListener('storage', function(e) {
     console.log('change')
     document.querySelector('[data-block-div-1]').textContent = localStorage.getItem('test')
 })
+
+/**
+ * AJAX - учимся посылать GET, POST запросы
+ */
+// XMLHttpRequest - класс, позволяющий отправлять запросы на сервер с помощью js
+// GET
+// Создаем объект класса
+let xhttp = new XMLHttpRequest();
+
+// Когда будет меняться состояние объекта xhttp, вызываем то, что внутри function()
+xhttp.onreadystatechange = function() {
+    // Отследим состояние запроса
+    // Если операция завершена. Все данные получены. Статус ответа - 200
+    if (this.readyState == 4 && this.status == 200) {
+        // responseText - ответ на запрос в виде строки или null
+        myFunction(this.responseText)
+    }
+}
+
+// Инициализируем запрос. Передаем параметры: способ запуска, куда посылаем, true - асинхронно (рекомендуется)
+xhttp.open('GET', 'http://localhost:63342/js-2-0/index.html', true)
+// Отправляем запрос.
+xhttp.send();
+
+// POST
+let xhttpPost = new XMLHttpRequest();
+
+xhttpPost.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myFunction(this.responseText)
+    }
+}
+
+xhttpPost.open('POST', 'http://localhost:63342/js-2-0/index.html', true)
+// Дообавим заголовки (задаем кодировку application/x-www-form-urlencoded)
+xhttpPost.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+xhttpPost.send();
+
+function myFunction(data) {
+    // Получим страницу в Console
+    console.log(data)
+}
+
+// Ошибка Cross-Origin Resource - удаленный сервер не разрешил запрос. Сработала система безопасности.
+
+/**
+ * Fetch на практике
+ */
+// Fetch всегда возвращает promise. then - оболочка над callback-функцией
+// fetch и GET
+fetch('http://localhost:63342/js-2-0/index.html')
+    .then(data => {
+        // В Console получим Responce
+        console.log(data)
+        // data.text() - Promise в состоянии ожидания
+        console.log(data.text())
+        // либо так
+        data.text().then(newData => {
+            console.log(newData)
+        })
+    })
+
+// Рассмотрит еще один пример
+fetch('http://localhost:63342/js-2-0/index.html')
+    .then(data => {
+        // В Console получим Responce
+        console.log(data)
+        // Можно проверить состояние if (data.ok == true) или if (data.status == 200)
+        // ! Если есть return, то данные попадут во второй then
+        // ! Если в стрелочной функции одна команда, то можно без return - просто data.text()
+        return data.text()
+    })
+    .then(data => {
+        console.log(data)
+    })
+
+// fetch и POST. Опции по умолчанию отмечены *
+fetch('http://localhost:63342/js-2-0/index.html', {
+    method: 'POST', // Выбираем метод запроса - *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // Указываем защиту - no-cors, *cors, same-origin
+    cache: 'no-cache', // Кэширование - *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // Если необходимо передавать данные (куки, параметры и так далее) - include, *same-origin, omit
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+        // Выберем заголовки - 'Content-Type': 'application/x-www-form-urlencoded' (в виде формы) или 'Content-Type': 'application/json' (JSON)
+    },
+    redirect: 'follow', // manual, *follow, error
+    referrerPolicy: 'no-referrer', // no-referrer, *client
+    //body: JSON.stringify(data) // передача данных должна соответствовать заголовку из headers
+    body: '<b>text</b>' // то, что придет в Form Data во вкладке Headers
+})
+// Если выбрали данные в виде JSON - .then(response => response.json())
+    .then(response => response.text())
+    .then(response => {
+        console.log(response)
+    })
+
+/**
+ * Promise, PromiseAll
+ */
+// Объект Promise используется для отложенных и асинхронных вычислений.
+const promise = new Promise((resolve, reject) => {
+    fetch('http://localhost:63342/js-2-0/index.html')
+        .then(data => {
+            // Установим, что будет являться успешным срабатыванием - resolve
+            resolve(data.text())
+        })
+});
+
+const promiseTwo = new Promise((resolve, reject) => {
+    fetch('http://localhost:63342/js-2-0/index.html')
+        .then(data => {
+            // Установим, что будет являться успешным срабатыванием - resolve
+            resolve(data.text())
+        })
+});
+
+// PromiseAll помогает обработать сразу несколько переменных
+// Сработает только после того как оба Promise наступят
+// Удобен, когда необходимо работать с несколькими запросами
+Promise.all([promise, promiseTwo]).then(value => {
+    console.log(value) // Получим массив данных
+})
+
+// Когда срабатывает событие
+promise.then(data => {
+    console.log(data)
+})
+
+console.log(promise);
+
+/**
+ * Особенности Return
+ */
+function testOne() {
+    document.querySelector('[data-return-txt]').textContent = 50
+}
+
+function testTwo(number) {
+    document.querySelector('[data-return-txt]').textContent = number
+}
+// Если передадим без параметров, то testOne сработает только при клике
+document.querySelector('[data-return-button]').onclick = testOne
+// Если передадим c параметрами testTwo() сработает сразу, а не при клике на кпопку
+//document.querySelector('[data-return-button]').onclick = testTwo(20)
+
+// Решение проблемы - сделать обертку
+document.querySelector('[data-return-button]').onclick = () => {
+    testTwo(20)
+}
