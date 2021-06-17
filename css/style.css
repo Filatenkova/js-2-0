@@ -1,5 +1,16 @@
+body {
+    width: 600px;
+    margin: 0px auto;
+}
+
 .paragraph .paragraph__block {
     display: block;
+}
+
+.text-center {
+    width: 100%;
+    text-align: center;
+    margin: 10px auto;
 }
 
 .bgr {
@@ -31,4 +42,10 @@
     padding: 5px;
     text-align: center;
     margin: 10px auto;
+}
+
+.bgr-orange.animation {
+    width: 60px;
+    height: 60px;
+    position: relative;
 }
