@@ -146,6 +146,19 @@ for (let i = 0; i < gas.length; i++) {
     }
 }
 
+// Клонируем массив
+let arrayOrigin = [1, 3, 4, 5, [6, 7]]
+let copyOrigin = arrayOrigin
+let cloneOrigin = [...arrayOrigin]
+arrayOrigin.push = 'new element'
+arrayOrigin[4].push = 8
+console.log(arrayOrigin)
+console.log(copyOrigin) // Будет ссылаться на массив arrayOrigin, подтягивая себе все изменения с arrayOrigin
+console.log(cloneOrigin) // Новый массив, который живет своей жизнью. Проблема 1 - вложенные массивы будут ссылаться на arrayOrigin
+// Решение проблемы 1
+let superOrigin = JSON.parse(JSON.stringify(arrayOrigin))
+console.log(superOrigin) // Новый массив, который живет своей жизнью, в том числе касаемо вложенных элементов. Проблема 2 - JSON.parse и JSON.stringify ломает вложенные объекты
+
 // Создать элемент
 let a = document.createElement('div')
 a.innerHTML = 'Hello!'

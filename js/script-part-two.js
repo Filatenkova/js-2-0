@@ -18,6 +18,48 @@ let upgradeAlert = new UpgradeAlert('New message', 'bgr-orange', '[data-text]', 
 upgradeAlert.showIconAlert();
 
 /**
+ * ООП Прототипы
+ */
+let user = {
+    username: 'Ivan',
+    surname: 'Ivanov',
+    _password: '', // приватное свойство
+    set password(pass) {
+        this._password = pass.trim()
+    },
+    get password() {
+        return this._password
+    }
+}
+
+user.password = ' Hello '
+console.log(user.password) // 'Hello' без пробелов, так как мы создали setter
+
+let newUser = {}
+newUser.__proto__ = user // newUser наследуется от user
+console.log(newUser.password) // унаследует get password()
+
+newUser.photo = 'ivan.jpg'
+
+console.log(newUser.__proto__.username) // получим значение свойства username прототипа user
+
+/**
+ * Try Catch. Работаем с ошибками
+ */
+let text = 'text'
+// try - пробуем что-то выполнить
+try {
+    document.querySelector('[data-try-catch]').innerHTML = text
+} catch(error) { // catch - ловим ошибку
+    console.log(error)
+}
+finally { // то, что будет выполнено в любом случае
+    console.log('Программа работает')
+}
+console.log(text) // ошибка
+
+
+/**
  * Рекурсия
  * Функция вызывает сама себя
  */
@@ -74,3 +116,20 @@ function lockingTrue() {
     }
 }
 console.log(lockingTrue())
+
+/**
+ * «Чистая» функция
+ * Если мы вводим одни и те же параметры, то чистая функция всегда возвращает один и тот же результат
+ * side-эффекты - эффекты, которые производит функция во время своей работы. Если функция меняет состояние системы.
+ * Если есть side-эффекты, то функция не является чистой
+ */
+// Пример
+function pure(a) {
+    // Если добавим, например, document.querySelector('[data-animation]').style.left = offset + 'px', то функция не будет «чистой»
+    return a * 5;
+}
+
+// Плюсы «чистой» функции:
+// 1. Меньше багов
+// 2. Проще тестировать
+// 3. Проще понимать
